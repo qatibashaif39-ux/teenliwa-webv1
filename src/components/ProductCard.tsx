@@ -7,7 +7,7 @@ import { useLanguage } from "@/context/LanguageContext";
 export function ProductCard({ product }: { product: Product }) {
   const { add } = useCart();
   const { t } = useLanguage();
-  const [qty, setQty] = useState(1);
+  const [qty, setQty] = useState(product.min_qty);
 
   return (
     <article className="group flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-card transition-all hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl hover:shadow-black/30">
@@ -43,7 +43,7 @@ export function ProductCard({ product }: { product: Product }) {
             </button>
             <span className="w-5 text-center text-sm font-bold">{qty}</span>
             <button
-              onClick={() => setQty((q) => Math.max(1, q - 1))}
+              onClick={() => setQty((q) => Math.max(product.min_qty, q - 1))}
               className="flex h-7 w-7 items-center justify-center rounded-full text-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
               aria-label="Decrease"
             >

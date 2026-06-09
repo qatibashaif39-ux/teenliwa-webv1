@@ -29,6 +29,7 @@ export function getDb(): DatabaseSync {
       available INTEGER NOT NULL DEFAULT 1,
       category_id TEXT REFERENCES categories(id) ON DELETE SET NULL,
       sort_order INTEGER NOT NULL DEFAULT 0,
+      min_qty INTEGER NOT NULL DEFAULT 1,
       created_at TEXT NOT NULL DEFAULT (datetime('now')),
       updated_at TEXT NOT NULL DEFAULT (datetime('now'))
     );
@@ -46,6 +47,13 @@ export function getDb(): DatabaseSync {
       cancelled_at INTEGER
     );
   `);
+
+  // Quick migration for min_qty
+  try {
+    db.exec("ALTER TABLE products ADD COLUMN min_qty INTEGER NOT NULL DEFAULT 1");
+  } catch {
+    // Column already exists, ignore
+  }
 
   // Check if seeding is needed
   const categoryCountPrep = db.prepare("SELECT COUNT(*) as count FROM categories");
@@ -181,8 +189,8 @@ export function getDb(): DatabaseSync {
     ];
 
     const insertProduct = db.prepare(`
-      INSERT INTO products (id, name, description, price, seed_key, available, category_id, sort_order)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO products (id, name, description, price, seed_key, available, category_id, sort_order, min_qty)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)
     `);
 
     for (const prod of productsToSeed) {

@@ -11,7 +11,7 @@ export function getCategories(): Category[] {
 export function getProducts(): ProductRow[] {
   const db = getDb();
   const prep = db.prepare(`
-    SELECT p.id, p.name, p.description, p.price, p.image_url, p.seed_key, p.available, p.category_id, p.sort_order, c.name as category_name
+    SELECT p.id, p.name, p.description, p.price, p.image_url, p.seed_key, p.available, p.category_id, p.sort_order, p.min_qty, c.name as category_name
     FROM products p
     LEFT JOIN categories c ON p.category_id = c.id
     ORDER BY p.sort_order ASC
@@ -29,14 +29,15 @@ export function getProducts(): ProductRow[] {
     sort_order: row.sort_order,
     category: row.category_name ?? "",
     image: resolveProductImage({ image_url: row.image_url, seed_key: row.seed_key }),
+    min_qty: Number(row.min_qty ?? 1),
   }));
 }
 
 export function insertProduct(input: ProductInput): void {
   const db = getDb();
   const prep = db.prepare(`
-    INSERT INTO products (id, name, description, price, image_url, seed_key, available, category_id, sort_order)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO products (id, name, description, price, image_url, seed_key, available, category_id, sort_order, min_qty)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
   prep.run(
     crypto.randomUUID(),
@@ -47,7 +48,8 @@ export function insertProduct(input: ProductInput): void {
     null,
     input.available ? 1 : 0,
     input.category_id,
-    input.sort_order ?? 0
+    input.sort_order ?? 0,
+    input.min_qty ?? 1
   );
 }
 

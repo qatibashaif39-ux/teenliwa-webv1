@@ -13,7 +13,7 @@ import {
   type ProductRow,
   type ProductInput,
 } from "@/lib/catalog";
-import { uploadImageFn } from "@/lib/upload.server";
+import { uploadImageFn } from "@/lib/upload";
 
 export const Route = createFileRoute("/dashboard/products")({
   component: DashboardProducts,
@@ -27,6 +27,7 @@ const empty: ProductInput = {
   available: true,
   category_id: null,
   sort_order: 0,
+  min_qty: 1,
 };
 
 function DashboardProducts() {
@@ -163,6 +164,7 @@ function ProductForm({
           available: product.available,
           category_id: product.category_id,
           sort_order: product.sort_order,
+          min_qty: product.min_qty,
         }
       : empty,
   );
@@ -180,11 +182,39 @@ function ProductForm({
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+
     const reader = new FileReader();
     reader.onload = (ev) => {
-      const base64 = ev.target?.result as string;
-      setPreview(base64);
-      setPendingFile({ base64, filename: file.name });
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        let width = img.width;
+        let height = img.height;
+        const maxSize = 800; // max dimension to keep payload small
+        
+        if (width > height && width > maxSize) {
+          height = Math.round((height * maxSize) / width);
+          width = maxSize;
+        } else if (height > maxSize) {
+          width = Math.round((width * maxSize) / height);
+          height = maxSize;
+        } else {
+          // If smaller than max, just keep original dimensions
+          width = img.width;
+          height = img.height;
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx?.drawImage(img, 0, 0, width, height);
+        
+        // compress as JPEG
+        const base64 = canvas.toDataURL("image/jpeg", 0.7);
+        setPreview(base64);
+        setPendingFile({ base64, filename: file.name });
+      };
+      img.src = ev.target?.result as string;
     };
     reader.readAsDataURL(file);
   }
@@ -305,6 +335,15 @@ function ProductForm({
               required
               value={form.price}
               onChange={(e) => setForm({ ...form, price: Number(e.target.value) })}
+            />
+            <input
+              className={field}
+              type="number"
+              min={1}
+              placeholder="أقل كمية"
+              required
+              value={form.min_qty}
+              onChange={(e) => setForm({ ...form, min_qty: Number(e.target.value) })}
             />
             <input
               className={field}

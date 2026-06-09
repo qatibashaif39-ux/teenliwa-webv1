@@ -17,6 +17,7 @@ export interface ProductRow {
   available: boolean;
   category_id: string | null;
   sort_order: number;
+  min_qty: number;
   category: string;
   image: string;
 }
@@ -29,6 +30,7 @@ export interface ProductInput {
   available: boolean;
   category_id: string | null;
   sort_order: number;
+  min_qty: number;
 }
 
 export function toProduct(row: ProductRow): Product {
@@ -40,6 +42,7 @@ export function toProduct(row: ProductRow): Product {
     image: row.image,
     category: row.category,
     available: row.available,
+    min_qty: row.min_qty,
   };
 }
 
