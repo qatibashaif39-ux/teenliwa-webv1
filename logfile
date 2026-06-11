@@ -1,0 +1,28 @@
+2026-06-11 16:10:12.079 +03 [18191] LOG:  starting PostgreSQL 18.2 on aarch64-unknown-linux-android, compiled by Android (13989888, +pgo, +bolt, +lto, +mlgo, based on r563880c) clang version 21.0.0 (https://android.googlesource.com/toolchain/llvm-project 5e96669f06077099aa41290cdb4c5e6fa0f59349), 64-bit
+2026-06-11 16:10:12.080 +03 [18191] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2026-06-11 16:10:12.082 +03 [18191] LOG:  listening on Unix socket "/data/data/com.termux/files/usr/tmp/.s.PGSQL.5432"
+2026-06-11 16:10:12.098 +03 [18200] LOG:  database system was shut down at 2026-06-11 16:09:58 +03
+2026-06-11 16:10:12.125 +03 [18191] LOG:  database system is ready to accept connections
+2026-06-11 16:11:30.601 +03 [18256] ERROR:  role "belal" does not exist
+2026-06-11 16:11:30.601 +03 [18256] STATEMENT:  CREATE DATABASE store_teen_liwe OWNER Belal;
+2026-06-11 16:11:30.603 +03 [18256] ERROR:  database "store_teen_liwe" does not exist
+2026-06-11 16:11:30.603 +03 [18256] STATEMENT:  GRANT ALL PRIVILEGES ON DATABASE store_teen_liwe TO Belal;
+2026-06-11 16:15:12.194 +03 [18198] LOG:  checkpoint starting: time
+2026-06-11 16:16:53.281 +03 [18198] LOG:  checkpoint complete: wrote 1003 buffers (6.1%), wrote 3 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=100.900 s, sync=0.168 s, total=101.088 s; sync files=319, longest=0.001 s, average=0.001 s; distance=4691 kB, estimate=4691 kB; lsn=0/1BF8888, redo lsn=0/1BF87F8
+2026-06-11 16:23:37.844 +03 [20443] ERROR:  syntax error at or near "Belal" at character 1
+2026-06-11 16:23:37.844 +03 [20443] STATEMENT:  Belal
+	password
+	postgres
+	password
+	Belal
+	u0_a288
+	CREATE DATABASE store_teen_liwe;
+2026-06-11 16:25:04.334 +03 [21356] ERROR:  syntax error at or near "u0_a288" at character 1
+2026-06-11 16:25:04.334 +03 [21356] STATEMENT:  u0_a288
+	CREATE DATABASE store_teen_liwe;
+2026-06-11 16:25:12.328 +03 [18198] LOG:  checkpoint starting: time
+2026-06-11 16:25:12.591 +03 [18198] LOG:  checkpoint complete: wrote 2 buffers (0.0%), wrote 0 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.210 s, sync=0.002 s, total=0.264 s; sync files=2, longest=0.002 s, average=0.001 s; distance=3 kB, estimate=4222 kB; lsn=0/1BF96B0, redo lsn=0/1BF9658
+2026-06-11 16:25:14.660 +03 [21356] ERROR:  database "store_teen_liwe" already exists
+2026-06-11 16:25:14.660 +03 [21356] STATEMENT:  CREATE DATABASE store_teen_liwe;
+2026-06-11 16:30:12.688 +03 [18198] LOG:  checkpoint starting: time
+2026-06-11 16:30:26.218 +03 [18198] LOG:  checkpoint complete: wrote 132 buffers (0.8%), wrote 1 SLRU buffers; 1 WAL file(s) added, 0 removed, 0 recycled; write=13.401 s, sync=0.030 s, total=13.530 s; sync files=77, longest=0.001 s, average=0.001 s; distance=658 kB, estimate=3865 kB; lsn=0/1C9DFB0, redo lsn=0/1C9DF20
