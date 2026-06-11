@@ -100,8 +100,8 @@ const createOrderFn = createServerFn({ method: "POST" })
   .inputValidator((d: Order) => d)
   .handler(async ({ data }) => {
     const { insertOrderInDb } = await import("./orders.server");
-    insertOrderInDb(data);
-    return data;
+  await insertOrderInDb(data);
+  return data;
   });
 
 export async function createOrder(input: {
@@ -133,8 +133,8 @@ export async function createOrder(input: {
 const findOrderFn = createServerFn({ method: "POST" })
   .inputValidator((tracking: string) => tracking)
   .handler(async ({ data: tracking }) => {
-    const { getOrderFromDb } = await import("./orders.server");
-    return getOrderFromDb(tracking);
+  const { getOrderFromDb } = await import("./orders.server");
+  return await getOrderFromDb(tracking);
   });
 
 export async function findOrder(tracking: string): Promise<Order | null> {
@@ -143,8 +143,8 @@ export async function findOrder(tracking: string): Promise<Order | null> {
 
 const getAllOrdersFn = createServerFn({ method: "GET" })
   .handler(async () => {
-    const { getOrdersFromDb } = await import("./orders.server");
-    return getOrdersFromDb();
+  const { getOrdersFromDb } = await import("./orders.server");
+  return await getOrdersFromDb();
   });
 
 export async function getAllOrders(): Promise<Order[]> {
@@ -154,8 +154,8 @@ export async function getAllOrders(): Promise<Order[]> {
 const cancelOrderFn = createServerFn({ method: "POST" })
   .inputValidator((tracking: string) => tracking)
   .handler(async ({ data: tracking }) => {
-    const { cancelOrderInDb } = await import("./orders.server");
-    return cancelOrderInDb(tracking);
+  const { cancelOrderInDb } = await import("./orders.server");
+  return await cancelOrderInDb(tracking);
   });
 
 export async function cancelOrder(tracking: string): Promise<Order | null> {

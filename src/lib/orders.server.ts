@@ -1,4 +1,4 @@
-import { getDb } from "./db.server";
+import { query } from "./db.server";
 import type { Order, OrderStatus } from "./orders";
 
 const HOUR = 1000 * 60 * 60;
@@ -37,13 +37,12 @@ function rowToOrder(row: any): Order {
   };
 }
 
-export function insertOrderInDb(order: Order): void {
-  const db = getDb();
-  const prep = db.prepare(`
+export async function insertOrderInDb(order: Order): Promise<void> {
+  const sql = `
     INSERT INTO orders (id, tracking, name, phone, address, items_json, total, status, created_at, cancelled_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `);
-  prep.run(
+    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+  `;
+  await query(sql, [
     order.id,
     order.tracking,
     order.name,
@@ -53,39 +52,33 @@ export function insertOrderInDb(order: Order): void {
     order.total,
     order.status,
     order.createdAt,
-    order.cancelledAt || null
-  );
+    order.cancelledAt || null,
+  ]);
 }
 
-export function getOrderFromDb(tracking: string): Order | null {
-  const db = getDb();
-  const prep = db.prepare("SELECT * FROM orders WHERE UPPER(tracking) = ?");
-  const row = prep.get(tracking.trim().toUpperCase());
+export async function getOrderFromDb(tracking: string): Promise<Order | null> {
+  const res = await query('SELECT * FROM orders WHERE UPPER(tracking) = $1', [tracking.trim().toUpperCase()]);
+  const row = res.rows[0];
   if (!row) return null;
   return progressStatus(rowToOrder(row));
 }
 
-export function getOrdersFromDb(): Order[] {
-  const db = getDb();
-  const prep = db.prepare("SELECT * FROM orders ORDER BY created_at DESC");
-  const rows = prep.all() as any[];
+export async function getOrdersFromDb(): Promise<Order[]> {
+  const res = await query('SELECT * FROM orders ORDER BY created_at DESC');
+  const rows = res.rows as any[];
   return rows.map(rowToOrder).map(progressStatus);
 }
 
-export function cancelOrderInDb(tracking: string): Order | null {
-  const db = getDb();
-  const order = getOrderFromDb(tracking);
+export async function cancelOrderInDb(tracking: string): Promise<Order | null> {
+  const order = await getOrderFromDb(tracking);
   if (!order) return null;
-  
-  if (order.status !== "pending" && order.status !== "processing") {
+
+  if (order.status !== 'pending' && order.status !== 'processing') {
     return order;
   }
-  
+
   const cancelledAt = Date.now();
-  db.prepare("UPDATE orders SET status = 'cancelled', cancelled_at = ? WHERE UPPER(tracking) = ?").run(
-    cancelledAt,
-    tracking.trim().toUpperCase()
-  );
-  
+  await query("UPDATE orders SET status = 'cancelled', cancelled_at = $1 WHERE UPPER(tracking) = $2", [cancelledAt, tracking.trim().toUpperCase()]);
+
   return getOrderFromDb(tracking);
 }

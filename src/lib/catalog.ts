@@ -49,8 +49,8 @@ export function toProduct(row: ProductRow): Product {
 // fetchCategories
 const fetchCategoriesFn = createServerFn({ method: "GET" })
   .handler(async () => {
-    const { getCategories } = await import("./catalog.server");
-    return getCategories();
+  const { getCategories } = await import("./catalog.server");
+  return await getCategories();
   });
 export async function fetchCategories(): Promise<Category[]> {
   return fetchCategoriesFn();
@@ -59,8 +59,8 @@ export async function fetchCategories(): Promise<Category[]> {
 // fetchProducts
 const fetchProductsFn = createServerFn({ method: "GET" })
   .handler(async () => {
-    const { getProducts } = await import("./catalog.server");
-    return getProducts();
+  const { getProducts } = await import("./catalog.server");
+  return await getProducts();
   });
 export async function fetchProducts(): Promise<ProductRow[]> {
   return fetchProductsFn();
@@ -70,8 +70,8 @@ export async function fetchProducts(): Promise<ProductRow[]> {
 const createProductFn = createServerFn({ method: "POST" })
   .inputValidator((d: ProductInput) => d)
   .handler(async ({ data }) => {
-    const { insertProduct } = await import("./catalog.server");
-    return insertProduct(data);
+  const { insertProduct } = await import("./catalog.server");
+  return await insertProduct(data);
   });
 export async function createProduct(input: ProductInput): Promise<void> {
   await createProductFn({ data: input });
@@ -81,8 +81,8 @@ export async function createProduct(input: ProductInput): Promise<void> {
 const updateProductFn = createServerFn({ method: "POST" })
   .inputValidator((d: { id: string; input: Partial<ProductInput> }) => d)
   .handler(async ({ data }) => {
-    const { editProduct } = await import("./catalog.server");
-    return editProduct(data.id, data.input);
+  const { editProduct } = await import("./catalog.server");
+  return await editProduct(data.id, data.input);
   });
 export async function updateProduct(id: string, input: Partial<ProductInput>): Promise<void> {
   await updateProductFn({ data: { id, input } });
@@ -92,8 +92,8 @@ export async function updateProduct(id: string, input: Partial<ProductInput>): P
 const deleteProductFn = createServerFn({ method: "POST" })
   .inputValidator((id: string) => id)
   .handler(async ({ data: id }) => {
-    const { removeProduct } = await import("./catalog.server");
-    return removeProduct(id);
+  const { removeProduct } = await import("./catalog.server");
+  return await removeProduct(id);
   });
 export async function deleteProduct(id: string): Promise<void> {
   await deleteProductFn({ data: id });
@@ -103,8 +103,8 @@ export async function deleteProduct(id: string): Promise<void> {
 const createCategoryFn = createServerFn({ method: "POST" })
   .inputValidator((d: { name: string; sort_order: number }) => d)
   .handler(async ({ data }) => {
-    const { insertCategory } = await import("./catalog.server");
-    return insertCategory(data.name, data.sort_order);
+  const { insertCategory } = await import("./catalog.server");
+  return await insertCategory(data.name, data.sort_order);
   });
 export async function createCategory(name: string, sort_order: number): Promise<void> {
   await createCategoryFn({ data: { name, sort_order } });
@@ -114,8 +114,8 @@ export async function createCategory(name: string, sort_order: number): Promise<
 const updateCategoryFn = createServerFn({ method: "POST" })
   .inputValidator((d: { id: string; fields: { name?: string; sort_order?: number } }) => d)
   .handler(async ({ data }) => {
-    const { editCategory } = await import("./catalog.server");
-    return editCategory(data.id, data.fields);
+  const { editCategory } = await import("./catalog.server");
+  return await editCategory(data.id, data.fields);
   });
 export async function updateCategory(id: string, fields: { name?: string; sort_order?: number }): Promise<void> {
   await updateCategoryFn({ data: { id, fields } });
@@ -125,8 +125,8 @@ export async function updateCategory(id: string, fields: { name?: string; sort_o
 const deleteCategoryFn = createServerFn({ method: "POST" })
   .inputValidator((id: string) => id)
   .handler(async ({ data: id }) => {
-    const { removeCategory } = await import("./catalog.server");
-    return removeCategory(id);
+  const { removeCategory } = await import("./catalog.server");
+  return await removeCategory(id);
   });
 export async function deleteCategory(id: string): Promise<void> {
   await deleteCategoryFn({ data: id });
