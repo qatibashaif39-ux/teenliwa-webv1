@@ -1,0 +1,17 @@
+-- Categories
+INSERT INTO categories (id, name, sort_order) VALUES ('8378d03e-63d8-45d9-9cfd-ef1909eeb027', 'تين', 1);
+INSERT INTO categories (id, name, sort_order) VALUES ('8dfedcf8-ff91-49a3-970a-6a250c6d9a62', 'تمور', 2);
+INSERT INTO categories (id, name, sort_order) VALUES ('b4d31c62-10c8-4fd1-9722-eb907faad2f8', 'فواكه', 3);
+INSERT INTO categories (id, name, sort_order) VALUES ('8a4038bb-bba5-450f-84b9-7873bdf0ea83', 'مكسرات', 4);
+
+-- Products
+INSERT INTO products (id, name, description, price, image_url, seed_key, available, category_id, sort_order, min_qty) VALUES ('6a943166-bf4f-4d7f-8994-639881687ed7', 'تين أحمر طازج', 'كيلو تين أحمر طبيعي 100% طازج ولذيذ. القص والتوصيل في نفس اليوم!', 100, NULL, 'red-fig', TRUE, '8378d03e-63d8-45d9-9cfd-ef1909eeb027', 1, 1);
+INSERT INTO products (id, name, description, price, image_url, seed_key, available, category_id, sort_order, min_qty) VALUES ('0f929060-b7f0-4786-9a95-55c0c18647c0', 'تين أصفر طازج', 'كيلو تين أصفر طازج طبيعي كالعسل — القص والتوصيل في نفس اليوم!', 100, NULL, 'yellow-fig', TRUE, '8378d03e-63d8-45d9-9cfd-ef1909eeb027', 2, 1);
+INSERT INTO products (id, name, description, price, image_url, seed_key, available, category_id, sort_order, min_qty) VALUES ('e56f81af-f80b-4b60-827d-4586be02e2d4', 'تمر جلاكسي سكري', 'تمر سكري الطعم عسل، عبوة فاخرة.', 150, NULL, 'dates', TRUE, '8dfedcf8-ff91-49a3-970a-6a250c6d9a62', 3, 1);
+INSERT INTO products (id, name, description, price, image_url, seed_key, available, category_id, sort_order, min_qty) VALUES ('0b68536c-855c-498b-82c4-14de51b746f3', 'تمر صقعي (3 كيلو)', 'تمر صقعي فاخر — عبوة 3 كيلو.', 150, NULL, 'dates', TRUE, '8dfedcf8-ff91-49a3-970a-6a250c6d9a62', 4, 1);
+INSERT INTO products (id, name, description, price, image_url, seed_key, available, category_id, sort_order, min_qty) VALUES ('52e342ab-a0b4-4c99-895c-6c000128fb37', 'تمر شيشي (3 كيلو)', 'تمر شيشي فاخر — عبوة 3 كيلو.', 150, NULL, 'dates', TRUE, '8dfedcf8-ff91-49a3-970a-6a250c6d9a62', 5, 1);
+INSERT INTO products (id, name, description, price, image_url, seed_key, available, category_id, sort_order, min_qty) VALUES ('4d57db60-56f6-4d6d-b252-e2326aa35438', 'تمر صفوي (3 كيلو)', 'تمر صفوي فاخر — عبوة 3 كيلو.', 150, NULL, 'dates', FALSE, '8dfedcf8-ff91-49a3-970a-6a250c6d9a62', 6, 1);
+INSERT INTO products (id, name, description, price, image_url, seed_key, available, category_id, sort_order, min_qty) VALUES ('4c59f556-3d94-4d99-8a6c-dadc7209de21', 'توت طويل', 'توت كيلو ب 100 درهم فاخر الطعم عسل.', 100, NULL, 'mulberry', FALSE, 'b4d31c62-10c8-4fd1-9722-eb907faad2f8', 7, 1);
+INSERT INTO products (id, name, description, price, image_url, seed_key, available, category_id, sort_order, min_qty) VALUES ('e3d858d5-a7fd-4e6c-a6e7-75d3c5e87cb9', 'صبار كيلو', 'صبار طازج كيلو الطعم سكر.', 100, NULL, 'cactus', FALSE, 'b4d31c62-10c8-4fd1-9722-eb907faad2f8', 8, 1);
+INSERT INTO products (id, name, description, price, image_url, seed_key, available, category_id, sort_order, min_qty) VALUES ('3a722534-7792-4ad2-80f8-209783b1e066', 'فقع علبة 400 جرام', 'فقع درجة أولى — وزن 400 جرام.', 150, NULL, 'truffle', TRUE, 'b4d31c62-10c8-4fd1-9722-eb907faad2f8', 9, 1);
+INSERT INTO products (id, name, description, price, image_url, seed_key, available, category_id, sort_order, min_qty) VALUES ('3a6dd14e-4dd6-4be2-ac82-7753a1ede500', 'لوز الحبان البحريني', 'لوز الحبان البحريني الفاخر.', 200, NULL, 'almonds', TRUE, '8a4038bb-bba5-450f-84b9-7873bdf0ea83', 10, 1);
