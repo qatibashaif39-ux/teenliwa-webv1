@@ -37,32 +37,24 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.handleUpload = void 0;
-var supabase_js_1 = require("@supabase/supabase-js");
-var supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-var supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-var supabase = (0, supabase_js_1.createClient)(supabaseUrl, supabaseAnonKey);
+var cloudinary_1 = require("cloudinary");
+cloudinary_1.v2.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 function handleUpload(data) {
-    var _a, _b;
     return __awaiter(this, void 0, void 0, function () {
-        var base64Data, buffer, ext, safeName, error, publicUrlData;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
-                case 0:
-                    base64Data = data.base64.replace(/^data:image\/[a-z]+;base64,/, "");
-                    buffer = Buffer.from(base64Data, "base64");
-                    ext = (_b = (_a = data.filename.split(".").pop()) === null || _a === void 0 ? void 0 : _a.toLowerCase()) !== null && _b !== void 0 ? _b : "jpg";
-                    safeName = "".concat(Date.now(), "-").concat(Math.random().toString(36).slice(2, 8), ".").concat(ext);
-                    return [4 /*yield*/, supabase.storage
-                            .from('product-images')
-                            .upload(safeName, buffer, { contentType: "image/".concat(ext) })];
+        var result;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, cloudinary_1.v2.uploader.upload(data.base64, {
+                        folder: 'store_products',
+                        public_id: "".concat(Date.now(), "-").concat(Math.random().toString(36).slice(2, 8)),
+                    })];
                 case 1:
-                    error = (_c.sent()).error;
-                    if (error) {
-                        console.error('Supabase upload error:', error);
-                        throw new Error('فشل رفع الصورة: ' + error.message);
-                    }
-                    publicUrlData = supabase.storage.from('product-images').getPublicUrl(safeName).data;
-                    return [2 /*return*/, { url: publicUrlData.publicUrl }];
+                    result = _a.sent();
+                    return [2 /*return*/, { url: result.secure_url }];
             }
         });
     });
