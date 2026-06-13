@@ -39,8 +39,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.handleUpload = void 0;
 var supabase_js_1 = require("@supabase/supabase-js");
 var supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-var supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-var supabase = (0, supabase_js_1.createClient)(supabaseUrl, supabaseServiceKey);
+var supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+var supabase = (0, supabase_js_1.createClient)(supabaseUrl, supabaseAnonKey);
 function handleUpload(data) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function () {
@@ -54,18 +54,14 @@ function handleUpload(data) {
                     safeName = "".concat(Date.now(), "-").concat(Math.random().toString(36).slice(2, 8), ".").concat(ext);
                     return [4 /*yield*/, supabase.storage
                             .from('product-images')
-                            .upload(safeName, buffer, {
-                            contentType: "image/".concat(ext),
-                        })];
+                            .upload(safeName, buffer, { contentType: "image/".concat(ext) })];
                 case 1:
                     error = (_c.sent()).error;
                     if (error) {
                         console.error('Supabase upload error:', error);
-                        throw new Error('فشل رفع الصورة');
+                        throw new Error('فشل رفع الصورة: ' + error.message);
                     }
-                    publicUrlData = supabase.storage
-                        .from('product-images')
-                        .getPublicUrl(safeName).data;
+                    publicUrlData = supabase.storage.from('product-images').getPublicUrl(safeName).data;
                     return [2 /*return*/, { url: publicUrlData.publicUrl }];
             }
         });
