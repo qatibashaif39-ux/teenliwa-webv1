@@ -35,13 +35,6 @@ export function ProductCard({ product }: { product: Product }) {
                     {product.description}
                 </p>
 
-                {/* إظهار الحد الأدنى للزبون */}
-                {product.available && minQty > 1 && (
-                    <p className="mt-2 text-xs text-muted-foreground">
-                        الحد الأدنى: {minQty} قطعة
-                    </p>
-                )}
-
                 <div className="mt-3 flex items-center justify-between">
                     <span className="text-lg font-extrabold text-primary">
                         {product.price}{" "}
