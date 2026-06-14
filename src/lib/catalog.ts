@@ -20,6 +20,7 @@ export interface ProductRow {
   sort_order: number;
   category: string;
   image: string;
+minimum_order_quantity: number; 
 }
 
 export async function fetchCategories(): Promise<Category[]> {
@@ -49,6 +50,8 @@ export async function fetchProducts(): Promise<ProductRow[]> {
     sort_order: row.sort_order,
     category: row.categories?.name ?? "",
     image: resolveProductImage({ image_url: row.image_url, seed_key: row.seed_key }),
+    minimum_order_quantity:
+    row.minimum_order_quantity ?? 1,
   }));
 }
 
@@ -73,6 +76,7 @@ export interface ProductInput {
   available: boolean;
   category_id: string | null;
   sort_order: number;
+minimum_order_quantity: number; 
 }
 
 export async function createProduct(input: ProductInput) {

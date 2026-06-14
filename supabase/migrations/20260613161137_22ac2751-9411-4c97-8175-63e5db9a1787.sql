@@ -51,3 +51,14 @@ USING (public.has_role(auth.uid(), 'admin'));
 CREATE TRIGGER update_delivery_zones_updated_at
 BEFORE UPDATE ON public.delivery_zones
 FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+CREATE OR REPLACE FUNCTION add_minimum_order_quantity_column()
+RETURNS void AS $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns 
+    WHERE table_name='public.products' AND column_name='minimum_order_quantity'
+  ) THEN
+    ALTER TABLE public.products ADD COLUMN minimum_order_quantity INT DEFAULT 1;
+  END IF;
+END;
