@@ -65,6 +65,7 @@ export function toProduct(row: ProductRow): Product {
     image: row.image,
     category: row.category,
     available: row.available,
+    minimum_order_quantity:row.minimum_order_quantity,
   };
 }
 

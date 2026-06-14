@@ -3,11 +3,13 @@ import { Minus, Plus } from "lucide-react";
 import { CURRENCY, type Product } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 import { useLanguage } from "@/context/LanguageContext";
+
 export function ProductCard({ product }: { product: Product }) {
     const { add } = useCart();
     const { t } = useLanguage();
-    const minQty = product.min_qty || 1;
+    const minQty = product.minimum_order_quantity ?? 1;
     const [qty, setQty] = useState(minQty);
+
     return (
         <article className="group flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-card transition-all hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl hover:shadow-black/30">
             <div className="relative aspect-square overflow-hidden">
@@ -20,11 +22,7 @@ export function ProductCard({ product }: { product: Product }) {
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 {!product.available && (
-                    <span
-                        className="absolute right-3 top-3 rounded-full
-                    bg-background/85 px-3 py-1 text-xs font-bold
-                    text-muted-foreground"
-                    >
+                    <span className="absolute right-3 top-3 rounded-full bg-background/85 px-3 py-1 text-xs font-bold text-muted-foreground">
                         {t("product.upcoming")}
                     </span>
                 )}
@@ -36,6 +34,14 @@ export function ProductCard({ product }: { product: Product }) {
                 <p className="mt-1 line-clamp-2 flex-1 text-sm text-muted-foreground">
                     {product.description}
                 </p>
+
+                {/* إظهار الحد الأدنى للزبون */}
+                {product.available && minQty > 1 && (
+                    <p className="mt-2 text-xs text-muted-foreground">
+                        الحد الأدنى: {minQty} قطعة
+                    </p>
+                )}
+
                 <div className="mt-3 flex items-center justify-between">
                     <span className="text-lg font-extrabold text-primary">
                         {product.price}{" "}
@@ -53,7 +59,7 @@ export function ProductCard({ product }: { product: Product }) {
                             {qty}
                         </span>
                         <button
-                            onClick={() => setQty(q => Math.max(1, q - 1))}
+                            onClick={() => setQty(q => Math.max(minQty, q - 1))}
                             className="flex h-7 w-7 items-center justify-center rounded-full text-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
                             aria-label="إنقاص"
                         >
