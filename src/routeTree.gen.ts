@@ -19,6 +19,7 @@ import { Route as OrdersIndexRouteImport } from './routes/orders.index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as OrdersTrackingRouteImport } from './routes/orders.$tracking'
 import { Route as DashboardProductsRouteImport } from './routes/dashboard/products'
+import { Route as DashboardDeliveryRouteImport } from './routes/dashboard/delivery'
 import { Route as DashboardCategoriesRouteImport } from './routes/dashboard/categories'
 import { Route as DashboardOrdersIndexRouteImport } from './routes/dashboard/orders.index'
 import { Route as DashboardOrdersTrackingRouteImport } from './routes/dashboard/orders.$tracking'
@@ -73,6 +74,11 @@ const DashboardProductsRoute = DashboardProductsRouteImport.update({
   path: '/products',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardDeliveryRoute = DashboardDeliveryRouteImport.update({
+  id: '/delivery',
+  path: '/delivery',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
 const DashboardCategoriesRoute = DashboardCategoriesRouteImport.update({
   id: '/categories',
   path: '/categories',
@@ -97,6 +103,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/track': typeof TrackRoute
   '/dashboard/categories': typeof DashboardCategoriesRoute
+  '/dashboard/delivery': typeof DashboardDeliveryRoute
   '/dashboard/products': typeof DashboardProductsRoute
   '/orders/$tracking': typeof OrdersTrackingRoute
   '/dashboard/': typeof DashboardIndexRoute
@@ -111,6 +118,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/track': typeof TrackRoute
   '/dashboard/categories': typeof DashboardCategoriesRoute
+  '/dashboard/delivery': typeof DashboardDeliveryRoute
   '/dashboard/products': typeof DashboardProductsRoute
   '/orders/$tracking': typeof OrdersTrackingRoute
   '/dashboard': typeof DashboardIndexRoute
@@ -127,6 +135,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/track': typeof TrackRoute
   '/dashboard/categories': typeof DashboardCategoriesRoute
+  '/dashboard/delivery': typeof DashboardDeliveryRoute
   '/dashboard/products': typeof DashboardProductsRoute
   '/orders/$tracking': typeof OrdersTrackingRoute
   '/dashboard/': typeof DashboardIndexRoute
@@ -144,6 +153,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/track'
     | '/dashboard/categories'
+    | '/dashboard/delivery'
     | '/dashboard/products'
     | '/orders/$tracking'
     | '/dashboard/'
@@ -158,6 +168,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/track'
     | '/dashboard/categories'
+    | '/dashboard/delivery'
     | '/dashboard/products'
     | '/orders/$tracking'
     | '/dashboard'
@@ -173,6 +184,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/track'
     | '/dashboard/categories'
+    | '/dashboard/delivery'
     | '/dashboard/products'
     | '/orders/$tracking'
     | '/dashboard/'
@@ -264,6 +276,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardProductsRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/delivery': {
+      id: '/dashboard/delivery'
+      path: '/delivery'
+      fullPath: '/dashboard/delivery'
+      preLoaderRoute: typeof DashboardDeliveryRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/dashboard/categories': {
       id: '/dashboard/categories'
       path: '/categories'
@@ -290,6 +309,7 @@ declare module '@tanstack/react-router' {
 
 interface DashboardRouteRouteChildren {
   DashboardCategoriesRoute: typeof DashboardCategoriesRoute
+  DashboardDeliveryRoute: typeof DashboardDeliveryRoute
   DashboardProductsRoute: typeof DashboardProductsRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
   DashboardOrdersTrackingRoute: typeof DashboardOrdersTrackingRoute
@@ -298,6 +318,7 @@ interface DashboardRouteRouteChildren {
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardCategoriesRoute: DashboardCategoriesRoute,
+  DashboardDeliveryRoute: DashboardDeliveryRoute,
   DashboardProductsRoute: DashboardProductsRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   DashboardOrdersTrackingRoute: DashboardOrdersTrackingRoute,

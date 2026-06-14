@@ -1,4 +1,3 @@
-import { createServerFn } from "@tanstack/react-start";
 import type { CartItem } from "@/context/CartContext";
 
 export type OrderStatus = "pending" | "processing" | "shipped" | "delivered" | "cancelled" | "refunded";
@@ -14,9 +13,14 @@ export interface Order {
   status: OrderStatus;
   createdAt: number;
   cancelledAt?: number;
+  deliveryZone?: string;
+  deliveryFee?: number;
+  subtotal?: number;
 }
 
+const STORAGE_KEY = "teenliwa-orders";
 const HOUR = 1000 * 60 * 60;
+// How long the simulated refund takes to complete after cancellation.
 export const REFUND_DELAY = HOUR * 24;
 
 export const STATUS_STEPS: { key: OrderStatus; label: string }[] = [
@@ -43,6 +47,7 @@ export function formatDateTime(ts: number) {
   });
 }
 
+// Cancellation is only allowed before the order ships.
 export function canCancel(status: OrderStatus) {
   return status === "pending" || status === "processing";
 }
@@ -64,6 +69,7 @@ export interface TimelineStep {
   reached: boolean;
 }
 
+// Builds the ordered list of steps with the timestamp each one happened (or will).
 export function getTimeline(order: Order): TimelineStep[] {
   if (order.cancelledAt) {
     const stage = refundStage(order);
@@ -88,29 +94,49 @@ export function getTimeline(order: Order): TimelineStep[] {
   }));
 }
 
+function load(): Order[] {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? (JSON.parse(raw) as Order[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+function save(orders: Order[]) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
+}
+
 function generateTracking() {
   const rand = Math.random().toString(36).slice(2, 8).toUpperCase();
   const stamp = Date.now().toString().slice(-4);
   return `TL-${stamp}${rand}`;
 }
 
-// Server functions wrapper
+// Simulate progression so the demo status feels alive.
+function progressStatus(order: Order): Order {
+  if (order.cancelledAt) {
+    const stage = refundStage(order);
+    return { ...order, status: stage === "refunded" ? "refunded" : "cancelled" };
+  }
+  const elapsed = Date.now() - order.createdAt;
+  let status: OrderStatus = "pending";
+  if (elapsed > HOUR * 48) status = "delivered";
+  else if (elapsed > HOUR * 12) status = "shipped";
+  else if (elapsed > HOUR) status = "processing";
+  return { ...order, status };
+}
 
-const createOrderFn = createServerFn({ method: "POST" })
-  .inputValidator((d: Order) => d)
-  .handler(async ({ data }) => {
-    const { insertOrderInDb } = await import("./orders.server");
-  await insertOrderInDb(data);
-  return data;
-  });
-
-export async function createOrder(input: {
+export function createOrder(input: {
   name: string;
   phone: string;
   address: string;
   items: CartItem[];
   total: number;
-}): Promise<Order> {
+  deliveryZone?: string;
+  deliveryFee?: number;
+  subtotal?: number;
+}): Order {
   const order: Order = {
     id: crypto.randomUUID(),
     tracking: generateTracking(),
@@ -126,38 +152,36 @@ export async function createOrder(input: {
     total: input.total,
     status: "pending",
     createdAt: Date.now(),
+    deliveryZone: input.deliveryZone,
+    deliveryFee: input.deliveryFee,
+    subtotal: input.subtotal,
   };
-  return createOrderFn({ data: order });
+  const orders = load();
+  orders.push(order);
+  save(orders);
+  return order;
 }
 
-const findOrderFn = createServerFn({ method: "POST" })
-  .inputValidator((tracking: string) => tracking)
-  .handler(async ({ data: tracking }) => {
-  const { getOrderFromDb } = await import("./orders.server");
-  return await getOrderFromDb(tracking);
-  });
-
-export async function findOrder(tracking: string): Promise<Order | null> {
-  return findOrderFn({ data: tracking });
+export function findOrder(tracking: string): Order | null {
+  const normalized = tracking.trim().toUpperCase();
+  const order = load().find((o) => o.tracking.toUpperCase() === normalized);
+  return order ? progressStatus(order) : null;
 }
 
-const getAllOrdersFn = createServerFn({ method: "GET" })
-  .handler(async () => {
-  const { getOrdersFromDb } = await import("./orders.server");
-  return await getOrdersFromDb();
-  });
-
-export async function getAllOrders(): Promise<Order[]> {
-  return getAllOrdersFn();
+export function getAllOrders(): Order[] {
+  return load()
+    .map(progressStatus)
+    .sort((a, b) => b.createdAt - a.createdAt);
 }
 
-const cancelOrderFn = createServerFn({ method: "POST" })
-  .inputValidator((tracking: string) => tracking)
-  .handler(async ({ data: tracking }) => {
-  const { cancelOrderInDb } = await import("./orders.server");
-  return await cancelOrderInDb(tracking);
-  });
-
-export async function cancelOrder(tracking: string): Promise<Order | null> {
-  return cancelOrderFn({ data: tracking });
+export function cancelOrder(tracking: string): Order | null {
+  const normalized = tracking.trim().toUpperCase();
+  const orders = load();
+  const idx = orders.findIndex((o) => o.tracking.toUpperCase() === normalized);
+  if (idx === -1) return null;
+  const current = progressStatus(orders[idx]);
+  if (!canCancel(current.status)) return current;
+  orders[idx] = { ...orders[idx], status: "cancelled", cancelledAt: Date.now() };
+  save(orders);
+  return progressStatus(orders[idx]);
 }

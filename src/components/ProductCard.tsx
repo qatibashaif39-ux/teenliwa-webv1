@@ -2,12 +2,10 @@ import { useState } from "react";
 import { Minus, Plus } from "lucide-react";
 import { CURRENCY, type Product } from "@/data/products";
 import { useCart } from "@/context/CartContext";
-import { useLanguage } from "@/context/LanguageContext";
 
 export function ProductCard({ product }: { product: Product }) {
   const { add } = useCart();
-  const { t } = useLanguage();
-  const [qty, setQty] = useState(product.min_qty);
+  const [qty, setQty] = useState(1);
 
   return (
     <article className="group flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-card transition-all hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl hover:shadow-black/30">
@@ -22,7 +20,7 @@ export function ProductCard({ product }: { product: Product }) {
         />
         {!product.available && (
           <span className="absolute right-3 top-3 rounded-full bg-background/85 px-3 py-1 text-xs font-bold text-muted-foreground">
-            {t("product.upcoming")}
+            قريباً
           </span>
         )}
       </div>
@@ -37,15 +35,15 @@ export function ProductCard({ product }: { product: Product }) {
             <button
               onClick={() => setQty((q) => q + 1)}
               className="flex h-7 w-7 items-center justify-center rounded-full text-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
-              aria-label="Increase"
+              aria-label="زيادة"
             >
               <Plus className="h-4 w-4" />
             </button>
             <span className="w-5 text-center text-sm font-bold">{qty}</span>
             <button
-              onClick={() => setQty((q) => Math.max(product.min_qty, q - 1))}
+              onClick={() => setQty((q) => Math.max(1, q - 1))}
               className="flex h-7 w-7 items-center justify-center rounded-full text-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
-              aria-label="Decrease"
+              aria-label="إنقاص"
             >
               <Minus className="h-4 w-4" />
             </button>
@@ -56,7 +54,7 @@ export function ProductCard({ product }: { product: Product }) {
           onClick={() => add(product, qty)}
           className="mt-4 w-full rounded-xl bg-primary py-2.5 text-sm font-bold text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:bg-secondary disabled:text-muted-foreground"
         >
-          {product.available ? t("product.add") : t("product.upcoming")}
+          {product.available ? "أضف إلى السلة" : "قريباً"}
         </button>
       </div>
     </article>

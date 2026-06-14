@@ -2,17 +2,10 @@ import { Link } from "@tanstack/react-router";
 import { ShoppingCart, Languages } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useLanguage } from "@/context/LanguageContext";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
 
 export function Header({ onCartClick }: { onCartClick: () => void }) {
     const { count } = useCart();
-    const { t, language, setLanguage } = useLanguage();
-
+    const { t, toggle } = useLanguage();
     return (
         <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-lg">
             <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
@@ -20,8 +13,8 @@ export function Header({ onCartClick }: { onCartClick: () => void }) {
                     to="/"
                     className="flex items-baseline gap-1 text-xl font-extrabold tracking-tight"
                 >
-                    <span className="text-foreground">TEEN</span>
-                    <span className="text-primary">LIWA</span>
+                    <span className="text-foreground">{t("brand.teen")}</span>
+                    <span className="text-primary">{t("brand.liwa")}</span>
                 </Link>
                 <nav className="hidden items-center gap-6 text-sm font-semibold text-muted-foreground sm:flex">
                     <Link
@@ -36,16 +29,11 @@ export function Header({ onCartClick }: { onCartClick: () => void }) {
                     >
                         {t("nav.orders")}
                     </Link>
-                    <Link
-                        to="/track"
-                        search={{ code: undefined }}
-                        className="transition-colors hover:text-foreground"
-                    >
-                        {t("nav.track")}
-                    </Link>
-                    {/* <Link to="/dashboard" className="transition-colors hover:text-foreground">
-            لوحة التحكم
-          </Link>*/}
+                    {/*<Link to="/track" search={{ code: undefined }}
+          className="transition-colors
+          hover:text-foreground">{t("nav.track")}</Link>*/}
+                    {/*<Link to="/dashboard" className="transition-colors
+          hover:text-foreground">{t("nav.dashboard")}</Link>*/}
                     <a
                         href="#about"
                         className="transition-colors hover:text-foreground"
@@ -54,21 +42,14 @@ export function Header({ onCartClick }: { onCartClick: () => void }) {
                     </a>
                 </nav>
                 <div className="flex items-center gap-2">
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <button className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-foreground transition-colors hover:bg-primary hover:text-primary-foreground">
-                                <Languages className="h-5 w-5" />
-                            </button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => setLanguage("ar")}>
-                                العربية
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => setLanguage("en")}>
-                                English
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    <button
+                        onClick={toggle}
+                        className="inline-flex h-10 items-center gap-1 rounded-full bg-secondary px-3 text-sm font-bold text-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
+                        aria-label="Toggle language"
+                    >
+                        <Languages className="h-4 w-4" />
+                        {t("lang.toggle")}
+                    </button>
                     <button
                         onClick={onCartClick}
                         className="relative inline-flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-foreground transition-colors hover:bg-primary hover:text-primary-foreground"

@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { ChevronLeft } from "lucide-react";
 import { CURRENCY } from "@/data/products";
 import { getAllOrders, isCancelled, STATUS_STEPS, statusIndex, type Order } from "@/lib/orders";
@@ -27,10 +26,9 @@ const FILTERS: { key: Filter; label: string }[] = [
 ];
 
 function DashboardOrders() {
-  const { data: all = [], isLoading } = useQuery({ queryKey: ["orders"], queryFn: getAllOrders });
+  const all = useMemo(() => getAllOrders(), []);
   const [filter, setFilter] = useState<Filter>("all");
   const [q, setQ] = useState("");
-
 
   const filtered = useMemo(() => {
     const term = q.trim().toUpperCase();
@@ -68,11 +66,7 @@ function DashboardOrders() {
         ))}
       </div>
 
-      {isLoading ? (
-        <div className="mt-6 text-center text-sm text-muted-foreground">
-          جارٍ تحميل الطلبات…
-        </div>
-      ) : filtered.length === 0 ? (
+      {filtered.length === 0 ? (
         <div className="mt-6 rounded-2xl border border-border/60 bg-card p-8 text-center text-sm text-muted-foreground">
           لا توجد طلبات مطابقة.
         </div>

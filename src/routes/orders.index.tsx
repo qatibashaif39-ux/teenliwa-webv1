@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { Package, ChevronLeft } from "lucide-react";
 import { CURRENCY } from "@/data/products";
 import { getAllOrders, isCancelled, STATUS_STEPS, statusIndex, type Order } from "@/lib/orders";
@@ -41,7 +40,7 @@ const PAGE_SIZE = 5;
 const DAY = 1000 * 60 * 60 * 24;
 
 function Orders() {
-  const { data: all = [], isLoading } = useQuery({ queryKey: ["orders"], queryFn: getAllOrders });
+  const all = useMemo(() => getAllOrders(), []);
   const [status, setStatus] = useState<StatusFilter>("all");
   const [time, setTime] = useState<TimeFilter>("all");
   const [sort, setSort] = useState<SortOrder>("newest");
@@ -101,11 +100,7 @@ function Orders() {
         </div>
       </div>
 
-      {isLoading ? (
-        <div className="mt-8 text-center py-8 text-sm text-muted-foreground">
-          جارٍ تحميل طلباتك…
-        </div>
-      ) : paged.length === 0 ? (
+      {paged.length === 0 ? (
         <div className="mt-8 rounded-2xl border border-border/60 bg-card p-8 text-center">
           <p className="text-sm text-muted-foreground">لا توجد طلبات مطابقة.</p>
           <Link to="/" className="mt-4 inline-block rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground hover:bg-primary/90">

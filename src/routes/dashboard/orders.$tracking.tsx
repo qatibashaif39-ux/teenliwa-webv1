@@ -14,16 +14,14 @@ function DashboardOrderDetail() {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    findOrder(tracking).then((o) => {
-      setOrder(o);
-      setLoaded(true);
-    });
+    setOrder(findOrder(tracking));
+    setLoaded(true);
   }, [tracking]);
 
-  const handleCancel = async () => {
+  const handleCancel = () => {
     if (!order) return;
     if (!confirm("هل أنت متأكد من إلغاء هذا الطلب؟")) return;
-    const updated = await cancelOrder(order.tracking);
+    const updated = cancelOrder(order.tracking);
     if (updated) setOrder(updated);
   };
 

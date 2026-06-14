@@ -49,12 +49,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const remove = (id: string) =>
       setItems((prev) => prev.filter((i) => i.product.id !== id));
     const setQty = (id: string, qty: number) =>
-      setItems((prev) => {
-        const item = prev.find((i) => i.product.id === id);
-        if (!item) return prev;
-        if (qty < item.product.min_qty) return prev.filter((i) => i.product.id !== id);
-        return prev.map((i) => (i.product.id === id ? { ...i, qty } : i));
-      });
+      setItems((prev) =>
+        qty <= 0
+          ? prev.filter((i) => i.product.id !== id)
+          : prev.map((i) => (i.product.id === id ? { ...i, qty } : i)),
+      );
     const clear = () => setItems([]);
     const count = items.reduce((s, i) => s + i.qty, 0);
     const total = items.reduce((s, i) => s + i.qty * i.product.price, 0);

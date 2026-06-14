@@ -17,7 +17,6 @@ export interface Product {
   image: string;
   category: string;
   available: boolean;
-  min_qty: number;
 }
 
 // Bundled fallback images for the originally-seeded products (keyed by seed_key).

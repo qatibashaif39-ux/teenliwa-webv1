@@ -23,16 +23,15 @@ function Track() {
   const [order, setOrder] = useState<Order | null>(null);
   const [searched, setSearched] = useState(false);
 
-  const lookup = async (value: string) => {
+  const lookup = (value: string) => {
     setSearched(true);
-    const o = await findOrder(value);
-    setOrder(o);
+    setOrder(findOrder(value));
   };
 
-  const handleCancel = async () => {
+  const handleCancel = () => {
     if (!order) return;
     if (!confirm("هل أنت متأكد من إلغاء هذا الطلب؟")) return;
-    const updated = await cancelOrder(order.tracking);
+    const updated = cancelOrder(order.tracking);
     if (updated) setOrder(updated);
   };
 

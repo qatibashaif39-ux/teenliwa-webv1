@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import {
   ResponsiveContainer,
   BarChart,
@@ -46,7 +45,7 @@ const STATUS_AR: Record<string, string> = {
 };
 
 function DashboardOverview() {
-  const { data: orders = [], isLoading } = useQuery({ queryKey: ["orders"], queryFn: getAllOrders });
+  const orders = useMemo(() => getAllOrders(), []);
   const [period, setPeriod] = useState<7 | 30>(7);
 
   const stats = useMemo(() => {
@@ -94,14 +93,6 @@ function DashboardOverview() {
 
   const recent = orders.slice(0, 5);
   const hasOrders = orders.length > 0;
-
-  if (isLoading) {
-    return (
-      <div className="flex h-[50vh] items-center justify-center text-sm text-muted-foreground">
-        جارٍ تحميل لوحة التحكم…
-      </div>
-    );
-  }
 
   return (
     <div>

@@ -2,9 +2,11 @@ import { Link } from "@tanstack/react-router";
 import { Minus, Plus, Trash2, X } from "lucide-react";
 import { CURRENCY } from "@/data/products";
 import { useCart } from "@/context/CartContext";
+import { useLanguage } from "@/context/LanguageContext";
 
 export function CartDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { items, total, setQty, remove } = useCart();
+  const { t } = useLanguage();
 
   return (
     <>
@@ -20,15 +22,15 @@ export function CartDrawer({ open, onClose }: { open: boolean; onClose: () => vo
         }`}
       >
         <div className="flex items-center justify-between border-b border-border/60 p-4">
-          <h2 className="text-lg font-bold">عربة التسوق</h2>
-          <button onClick={onClose} aria-label="إغلاق" className="rounded-full p-1 hover:bg-secondary">
+          <h2 className="text-lg font-bold">{t("cart.title")}</h2>
+          <button onClick={onClose} aria-label={t("common.close")} className="rounded-full p-1 hover:bg-secondary">
             <X className="h-5 w-5" />
           </button>
         </div>
 
         {items.length === 0 ? (
           <div className="flex flex-1 items-center justify-center p-6 text-center text-sm text-muted-foreground">
-            لا توجد منتجات بعد، الرجاء اختيار منتج إلى السلة.
+            {t("cart.empty")}
           </div>
         ) : (
           <div className="flex-1 space-y-3 overflow-y-auto p-4">
@@ -67,7 +69,7 @@ export function CartDrawer({ open, onClose }: { open: boolean; onClose: () => vo
 
         <div className="border-t border-border/60 p-4">
           <div className="mb-3 flex items-center justify-between text-base font-bold">
-            <span>الإجمالي</span>
+            <span>{t("cart.total")}</span>
             <span className="text-primary">{total.toFixed(2)} {CURRENCY}</span>
           </div>
           <Link
@@ -78,7 +80,7 @@ export function CartDrawer({ open, onClose }: { open: boolean; onClose: () => vo
               items.length === 0 ? "pointer-events-none opacity-50" : ""
             }`}
           >
-            تسجيل الطلب
+            {t("cart.checkout")}
           </Link>
         </div>
       </aside>
