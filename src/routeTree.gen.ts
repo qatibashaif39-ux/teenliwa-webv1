@@ -21,6 +21,7 @@ import { Route as OrdersTrackingRouteImport } from './routes/orders.$tracking'
 import { Route as DashboardProductsRouteImport } from './routes/dashboard/products'
 import { Route as DashboardDeliveryRouteImport } from './routes/dashboard/delivery'
 import { Route as DashboardCategoriesRouteImport } from './routes/dashboard/categories'
+import { Route as DashboardAdminsRouteImport } from './routes/dashboard/admins'
 import { Route as DashboardOrdersIndexRouteImport } from './routes/dashboard/orders.index'
 import { Route as DashboardOrdersTrackingRouteImport } from './routes/dashboard/orders.$tracking'
 
@@ -84,6 +85,11 @@ const DashboardCategoriesRoute = DashboardCategoriesRouteImport.update({
   path: '/categories',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardAdminsRoute = DashboardAdminsRouteImport.update({
+  id: '/admins',
+  path: '/admins',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
 const DashboardOrdersIndexRoute = DashboardOrdersIndexRouteImport.update({
   id: '/orders/',
   path: '/orders/',
@@ -102,6 +108,7 @@ export interface FileRoutesByFullPath {
   '/checkout': typeof CheckoutRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/track': typeof TrackRoute
+  '/dashboard/admins': typeof DashboardAdminsRoute
   '/dashboard/categories': typeof DashboardCategoriesRoute
   '/dashboard/delivery': typeof DashboardDeliveryRoute
   '/dashboard/products': typeof DashboardProductsRoute
@@ -117,6 +124,7 @@ export interface FileRoutesByTo {
   '/checkout': typeof CheckoutRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/track': typeof TrackRoute
+  '/dashboard/admins': typeof DashboardAdminsRoute
   '/dashboard/categories': typeof DashboardCategoriesRoute
   '/dashboard/delivery': typeof DashboardDeliveryRoute
   '/dashboard/products': typeof DashboardProductsRoute
@@ -134,6 +142,7 @@ export interface FileRoutesById {
   '/checkout': typeof CheckoutRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/track': typeof TrackRoute
+  '/dashboard/admins': typeof DashboardAdminsRoute
   '/dashboard/categories': typeof DashboardCategoriesRoute
   '/dashboard/delivery': typeof DashboardDeliveryRoute
   '/dashboard/products': typeof DashboardProductsRoute
@@ -152,6 +161,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/sitemap.xml'
     | '/track'
+    | '/dashboard/admins'
     | '/dashboard/categories'
     | '/dashboard/delivery'
     | '/dashboard/products'
@@ -167,6 +177,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/sitemap.xml'
     | '/track'
+    | '/dashboard/admins'
     | '/dashboard/categories'
     | '/dashboard/delivery'
     | '/dashboard/products'
@@ -183,6 +194,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/sitemap.xml'
     | '/track'
+    | '/dashboard/admins'
     | '/dashboard/categories'
     | '/dashboard/delivery'
     | '/dashboard/products'
@@ -290,6 +302,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardCategoriesRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/admins': {
+      id: '/dashboard/admins'
+      path: '/admins'
+      fullPath: '/dashboard/admins'
+      preLoaderRoute: typeof DashboardAdminsRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/dashboard/orders/': {
       id: '/dashboard/orders/'
       path: '/orders'
@@ -308,6 +327,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface DashboardRouteRouteChildren {
+  DashboardAdminsRoute: typeof DashboardAdminsRoute
   DashboardCategoriesRoute: typeof DashboardCategoriesRoute
   DashboardDeliveryRoute: typeof DashboardDeliveryRoute
   DashboardProductsRoute: typeof DashboardProductsRoute
@@ -317,6 +337,7 @@ interface DashboardRouteRouteChildren {
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
+  DashboardAdminsRoute: DashboardAdminsRoute,
   DashboardCategoriesRoute: DashboardCategoriesRoute,
   DashboardDeliveryRoute: DashboardDeliveryRoute,
   DashboardProductsRoute: DashboardProductsRoute,

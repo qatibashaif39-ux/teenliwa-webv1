@@ -64,8 +64,8 @@ export function Footer() {
                 {/* حقوق الملكية */}
                 <div className="mt-6 border-t border-border/40 pt-4 text-center">
                     <p className="text-xs text-muted-foreground">
-                        جميع الحقوق محفوظة © {new Date().getFullYear()} م.بلال
-                        شائف
+                        جميع الحقوق محفوظة © {new Date().getFullYear()}{" "}
+                        gigatopx.com
                     </p>
                 </div>
             </div>

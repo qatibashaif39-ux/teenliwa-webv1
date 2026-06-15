@@ -20,7 +20,9 @@ const NAV = [
   { to: "/dashboard/orders", label: "الطلبات", icon: ShoppingBag, exact: false },
   { to: "/dashboard/products", label: "المنتجات", icon: Package, exact: false },
   { to: "/dashboard/categories", label: "الأصناف", icon: Tags, exact: false },
-  { to: "/dashboard/delivery", label: "مناطق التوصيل", icon: Truck, exact: false },
+  { to: "/dashboard/delivery", label: "مناطق التوصيل", icon: Truck, exact: false
+  },
+  
 ] as const;
 
 function DashboardLayout() {
