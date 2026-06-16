@@ -26,8 +26,39 @@ function AuthPage() {
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
 
+  // Auto-login from environment variables on mount
   useEffect(() => {
-    if (!authLoading && user) navigate({ to: "/dashboard" });
+    const autoLogin = async () => {
+      const envEmail = import.meta.env.VITE_TEST_USER_EMAIL;
+      const envPassword = import.meta.env.VITE_TEST_USER_PASSWORD;
+
+      if (envEmail && envPassword && !user) {
+        setBusy(true);
+        try {
+          const { error } = await supabase.auth.signInWithPassword({
+            email: envEmail,
+            password: envPassword,
+          });
+          if (error) {
+            setError(`Auto-login failed: ${error.message}`);
+          } else {
+            navigate({ to: "/dashboard" });
+          }
+        } catch (err: any) {
+          setError(`Auto-login error: ${err?.message ?? "Unknown error"}`);
+        } finally {
+          setBusy(false);
+        }
+      }
+    };
+
+    if (!authLoading) {
+      if (user) {
+        navigate({ to: "/dashboard" });
+      } else {
+        autoLogin();
+      }
+    }
   }, [authLoading, user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -103,7 +134,7 @@ function AuthPage() {
           <button
             type="submit"
             disabled={busy}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-2.5 text-sm font-bold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-60"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-2.5 text-sm font-bold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50"
           >
             {busy && <Loader2 className="h-4 w-4 animate-spin" />}
             {mode === "login" ? "تسجيل الدخول" : "إنشاء حساب"}
